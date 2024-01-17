@@ -38,8 +38,8 @@ class Smoke(Particule):
         self.ttl = 1
 
     def update(self, dt):
-        vx = self.dx * self.v * self.ttl**0.5
-        vy = self.dy * self.v * self.ttl**0.5
+        vx = self.dx * self.v * self.ttl**1.5
+        vy = self.dy * self.v * self.ttl**1.5
         vy -= 9.81 * dt
 
         self.x += vx * dt

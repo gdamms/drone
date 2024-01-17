@@ -28,12 +28,12 @@ class Env:
             return
         ox, oy = rotate_vector(dx, dy, math.pi / 2)
 
-        rand = random.uniform(0, 1) - 0.5
-        x += 0.5 * dx + ox * rand * 0.4
-        y += 0.5 * dy + oy * rand * 0.4
+        rand = random.uniform(-1, 1)
+        x += 0.5 * dx + ox * rand * 0.2
+        y += 0.5 * dy + oy * rand * 0.2
 
-        pvx = vx + 10 * p * dx
-        pvy = vy + 10 * p * dy
+        pvx = vx + 8 * p * dx + ox * random.uniform(-1, 1)
+        pvy = vy + 8 * p * dy + oy * random.uniform(-1, 1)
 
         part = Smoke(x, y, pvx, pvy)
         self.particules.append(part)

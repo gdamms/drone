@@ -1,5 +1,6 @@
 import pygame as pg
 import math
+import random
 
 from src.env.utils import *
 
@@ -167,44 +168,73 @@ class Drone:
                    p15[1] + v5_0[1] - e5_0[1] * 1.5)
             p17 = (p10[0] - 1.5 * e5_0[0], p10[1] - 1.5 * e5_0[1])
 
+            def draw_egg_shape(x, y, c, a):
+                s = (0.9 * c + 0.1)
+                r1 = 0.3 * s
+                r2 = 0.1 * s
+                d = 0.4 * s
+                dim = 2 * (d + r2)
+
+                part = pg.Surface((dim * scale, dim * scale),
+                                  pg.SRCALPHA)
+
+                p1 = (dim / 2 + r1 * math.cos(a),
+                      dim / 2 + r1 * math.sin(a))
+                p2 = (dim / 2 + r1 * math.cos(a + math.pi),
+                      dim / 2 + r1 * math.sin(a + math.pi))
+                p3 = (dim / 2 + r2 * math.cos(a + math.pi) + d * math.cos(a + math.pi / 2),
+                      dim / 2 + r2 * math.sin(a + math.pi) + d * math.sin(a + math.pi / 2))
+                p4 = (dim / 2 + r2 * math.cos(a) + d * math.cos(a + math.pi / 2),
+                      dim / 2 + r2 * math.sin(a) + d * math.sin(a + math.pi / 2))
+
+                c = (1 - c)
+                color = (255, int(c * 255), 0, 255)
+
+                pg.draw.circle(
+                    part,
+                    color,
+                    (int(dim * scale / 2), int(dim * scale / 2)),
+                    r1 * scale,
+                )
+                pg.draw.circle(
+                    part,
+                    color,
+                    (int((dim / 2 + d * math.cos(a + math.pi / 2)) * scale),
+                     int((dim / 2 + d * math.sin(a + math.pi / 2)) * scale)),
+                    r2 * scale,
+                )
+                pg.draw.polygon(
+                    part,
+                    color,
+                    [
+                        (int(p1[0] * scale), int(p1[1] * scale)),
+                        (int(p2[0] * scale), int(p2[1] * scale)),
+                        (int(p3[0] * scale), int(p3[1] * scale)),
+                        (int(p4[0] * scale), int(p4[1] * scale)),
+                    ],
+                )
+                part.set_alpha(int(random.uniform(5, 20)))
+                screen.blit(part, ((x - dim / 2) * scale,
+                                   (y - dim / 2) * scale))
             p18 = ((p8[0] + p9[0]) / 2, (p8[1] + p9[1]) / 2)
-            p19 = (p18[0] + 0.4 * dx, p18[1] + 0.4 * dy)
-            p20 = (p18[0] + 0.25 * ox, p18[1] + 0.25 * oy)
-            p21 = (p18[0] - 0.25 * ox, p18[1] - 0.25 * oy)
-            p22 = (p19[0] - 0.1 * ox, p19[1] - 0.1 * oy)
-            p23 = (p19[0] + 0.1 * ox, p19[1] + 0.1 * oy)
 
             pg.draw.circle(screen, (0, 0, 0),
                            (int(x * scale),
                             int(y * scale)),
                            0.3 * scale)
-            pg.draw.circle(
-                screen,
-                (255, 0, 0),
-                (int(p18[0] * scale), int(p18[1] * scale)),
-                int(0.25 * scale),
-            )
-            pg.draw.circle(
-                screen,
-                (255, 0, 0),
-                (int(p19[0] * scale), int(p19[1] * scale)),
-                int(0.1 * scale),
-            )
-            pg.draw.polygon(
-                screen,
-                (255, 0, 0),
-                [
-                    (int(p20[0] * scale), int(p20[1] * scale)),
-                    (int(p21[0] * scale), int(p21[1] * scale)),
-                    (int(p22[0] * scale), int(p22[1] * scale)),
-                    (int(p23[0] * scale), int(p23[1] * scale)),
-                ],
-            )
+
             pg.draw.polygon(screen, (100, 100, 100),
                             [(int(p6[0] * scale), int(p6[1] * scale)),
                              (int(p7[0] * scale), int(p7[1] * scale)),
                              (int(p8[0] * scale), int(p8[1] * scale)),
                              (int(p9[0] * scale), int(p9[1] * scale))])
+
+            p = power
+            while p > 0:
+                ex = p18[0] + 0.05 * random.uniform(-1, 1)
+                ey = p18[1] + 0.05 * random.uniform(-1, 1)
+                draw_egg_shape(ex, ey, p, angle - math.pi/2)
+                p -= random.uniform(0, 0.05)
 
             pg.draw.polygon(screen, (0, 0, 0),
                             [(int(p1[0] * scale), int(p1[1] * scale)),
